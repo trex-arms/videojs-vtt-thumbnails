@@ -14,9 +14,10 @@ npm install videojs-vtt-thumbnails via github (`github:trex-arms/videojs-vtt-thu
 
 ```js
 import videojs from 'video.js'
-
-import 'videojs-vtt-thumbnails'
+import register_vtt_thumbnails from 'videojs-vtt-thumbnails'
 import 'videojs-vtt-thumbnails/index.css' // your bundler must be configured to handle this
+
+register_vtt_thumbnails(videojs)
 
 const player = videojs(target)
 

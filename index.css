@@ -2,7 +2,7 @@
 	display: block;
 }
 
-.video-js.vjs-vtt-thumbnail-display {
+.video-js .vjs-vtt-thumbnail-display {
 	position: absolute;
 	transition: transform .1s, opacity .2s;
 	bottom: 85%;

@@ -1,54 +1,10 @@
-import videojs from 'video.js'
 import { version as VERSION } from '../package.json'
-// import request from 'request';
 
 // Default options for the plugin.
 const defaults = {}
 
 // Cache for image elements
 const cache = {}
-
-// Cross-compatibility for Video.js 5 and 6.
-const registerPlugin = videojs.registerPlugin || videojs.plugin
-// const dom = videojs.dom || videojs;
-
-/**
- * Function to invoke when the player is ready.
- *
- * This is a great place for your plugin to initialize itself. When this
- * function is called, the player will have its DOM and child components
- * in place.
- *
- * @function onPlayerReady
- * @param    {Player} player
- *           A Video.js player object.
- *
- * @param    {Object} [options={}]
- *           A plain object containing options for the plugin.
- */
-const onPlayerReady = (player, options) => {
-	player.addClass(`vjs-vtt-thumbnails`)
-	// eslint-disable-next-line new-cap, no-use-before-define
-	player.vttThumbnails = new vttThumbnailsPlugin(player, options)
-}
-
-/**
- * A video.js plugin.
- *
- * In the plugin function, the value of `this` is a video.js `Player`
- * instance. You cannot rely on the player being in a "ready" state here,
- * depending on how the plugin is invoked. This may or may not be important
- * to you; if not, remove the wait for "ready"!
- *
- * @function vttThumbnails
- * @param    {Object} [options={}]
- *           An object of options left to the plugin author to define.
- */
-const vttThumbnails = function(options) {
-	this.ready(() => {
-		onPlayerReady(this, videojs.mergeOptions(defaults, options))
-	})
-}
 
 /**
  * VTT Thumbnails class.
@@ -68,9 +24,10 @@ class vttThumbnailsPlugin {
 	 * @param    {Object} [options={}]
 	 *           A plain object containing options for the plugin.
 	 */
-	constructor(player, options) {
+	constructor(player, options, videojs) {
 		this.player = player
 		this.options = options
+		this.videojs = videojs
 		this.listenForDurationChange()
 		this.initializeThumbnails()
 		this.registeredEvents = {}
@@ -235,7 +192,7 @@ class vttThumbnailsPlugin {
 
 	onBarMousemove(event) {
 		this.updateThumbnailStyle(
-			videojs.dom.getPointerPosition(this.progressBar, event).x,
+			this.videojs.dom.getPointerPosition(this.progressBar, event).x,
 			this.progressBar.offsetWidth,
 		)
 	}
@@ -491,10 +448,19 @@ class vttThumbnailsPlugin {
 	}
 }
 
-// Register the plugin with video.js.
-registerPlugin(`vttThumbnails`, vttThumbnails)
+export default videojs => {
+	const vttThumbnails = function(options) {
+		this.ready(() => {
+			this.addClass(`vjs-vtt-thumbnails`)
+			this.vttThumbnails = new vttThumbnailsPlugin(this, videojs.mergeOptions(defaults, options), videojs)
+		})
+	}
 
-// Include the version number.
-vttThumbnails.VERSION = VERSION
+	// Include the version number.
+	vttThumbnails.VERSION = VERSION
 
-export default vttThumbnails
+	// Register the plugin with video.js.
+	videojs.registerPlugin(`vttThumbnails`, vttThumbnails)
+
+	return vttThumbnails
+}
