@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "./",
+			"folder_exclude_patterns": [
+				"node_modules",
+			],
+			"follow_symlinks": true
+		}
+	],
+	"settings": {
+		"default_line_ending": "unix",
+		"ESLint-Formatter": {
+			"format_on_save": true,
+			"format_on_save_extensions": [
+				"js",
+			]
+		}
+	}
+}
