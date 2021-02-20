@@ -5,12 +5,10 @@ Video.js plugin that displays thumbnails on progress bar hover, driven by extern
 ## Installation
 
 ```sh
-npm install --save videojs-vtt-thumbnails
+npm install --save github:trex-arms/videojs-vtt-thumbnails#master
 ```
 
 ## Usage
-
-npm install videojs-vtt-thumbnails via github (`github:trex-arms/videojs-vtt-thumbnails`) and `import` the plugin as you would any other ESM module.
 
 ```js
 import videojs from 'video.js'
