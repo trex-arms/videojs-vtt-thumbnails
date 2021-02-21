@@ -137,12 +137,6 @@ class vttThumbnailsPlugin {
 	}
 
 	setupThumbnailElement(data) {
-		let mouseDisplay = null
-
-		if (!this.options.showTimestamp) {
-			mouseDisplay = this.player.$(`.vjs-mouse-display`)
-		}
-
 		// eslint-disable-next-line no-undef
 		const thumbHolder = document.createElement(`div`)
 
@@ -150,10 +144,6 @@ class vttThumbnailsPlugin {
 		this.progressBar = this.player.$(`.vjs-progress-control`)
 		this.progressBar.appendChild(thumbHolder)
 		this.thumbnailHolder = thumbHolder
-
-		if (mouseDisplay && !this.options.showTimestamp) {
-			mouseDisplay.classList.add(`vjs-hidden`)
-		}
 
 		this.registeredEvents.progressBarMouseEnter = () => this.onBarMouseenter()
 
@@ -193,7 +183,6 @@ class vttThumbnailsPlugin {
 	onBarMousemove(event) {
 		this.updateThumbnailStyle(
 			this.videojs.dom.getPointerPosition(this.progressBar, event).x,
-			this.progressBar.offsetWidth,
 		)
 	}
 
@@ -224,7 +213,7 @@ class vttThumbnailsPlugin {
 		this.thumbnailHolder.style.opacity = `0`
 	}
 
-	updateThumbnailStyle(percent, width) {
+	updateThumbnailStyle(percent) {
 		const duration = this.player.duration()
 		const time = percent * duration
 		const currentStyle = this.getStyleForTime(time)
@@ -233,19 +222,26 @@ class vttThumbnailsPlugin {
 			return this.hideThumbnailHolder()
 		}
 
+		const width = this.player.currentWidth()
+
 		const xPos = percent * width
 		const thumbnailWidth = parseInt(currentStyle.width, 10)
+		const scale = Math.min((width / 4) / thumbnailWidth, 0.5)
 		const halfthumbnailWidth = thumbnailWidth >> 1
-		const marginRight = width - (xPos + halfthumbnailWidth)
-		const marginLeft = xPos - halfthumbnailWidth
+		const marginRight = width - (xPos + (halfthumbnailWidth * scale))
+		const marginLeft = (xPos - (halfthumbnailWidth * scale))
+		const thumbnailHeight = parseInt(currentStyle.height, 10)
 
 		if (marginLeft > 0 && marginRight > 0) {
-			this.thumbnailHolder.style.transform = `translateX(` + (xPos - halfthumbnailWidth) + `px)`
+			this.thumbnailHolder.style.transform = `translateX(${xPos - halfthumbnailWidth}px)`
 		} else if (marginLeft <= 0) {
-			this.thumbnailHolder.style.transform = `translateX(` + 0 + `px)`
+			this.thumbnailHolder.style.transform = `translateX(${(xPos - halfthumbnailWidth) - marginLeft}px)`
 		} else if (marginRight <= 0) {
-			this.thumbnailHolder.style.transform = `translateX(` + (width - thumbnailWidth) + `px)`
+			this.thumbnailHolder.style.transform = `translateX(${(width - halfthumbnailWidth) - (halfthumbnailWidth * scale)}px)`
 		}
+
+		this.thumbnailHolder.style.transform = `${this.thumbnailHolder.style.transform} scale(${scale})`
+		this.thumbnailHolder.style.bottom = `${-((thumbnailHeight - (thumbnailHeight * scale)) / 2) + 50}px`
 
 		if (this.lastStyle && this.lastStyle === currentStyle) {
 			return

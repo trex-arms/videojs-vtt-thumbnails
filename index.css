@@ -5,7 +5,11 @@
 .video-js .vjs-vtt-thumbnail-display {
 	position: absolute;
 	transition: transform .1s, opacity .2s;
-	bottom: 85%;
+	bottom: 0;
 	pointer-events: none;
 	box-shadow: 0 0 7px rgba(0,0,0,.6);
+}
+
+.video-js .vjs-time-tooltip {
+	top: -31px;
 }
