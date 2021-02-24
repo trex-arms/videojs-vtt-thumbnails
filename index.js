@@ -51,8 +51,12 @@ class vttThumbnailsPlugin {
 
 		if (this.progressBar) {
 			this.progressBar.removeEventListener(`mouseenter`, this.registeredEvents.progressBarMouseEnter)
+			this.progressBar.removeEventListener(`touchstart`, this.registeredEvents.progressBarMouseEnter)
+
 			this.progressBar.removeEventListener(`mouseleave`, this.registeredEvents.progressBarMouseLeave)
+			this.progressBar.removeEventListener(`touchend`, this.registeredEvents.progressBarMouseLeave)
 			this.progressBar.removeEventListener(`mousemove`, this.registeredEvents.progressBarMouseMove)
+			this.progressBar.removeEventListener(`touchmove`, this.registeredEvents.progressBarMouseMove)
 		}
 
 		delete this.registeredEvents.progressBarMouseEnter
@@ -142,6 +146,8 @@ class vttThumbnailsPlugin {
 
 		thumbHolder.setAttribute(`class`, `vjs-vtt-thumbnail-display`)
 		this.progressBar = this.player.$(`.vjs-progress-control`)
+		this.progressHolder = this.player.$(`.vjs-progress-holder`)
+
 		this.progressBar.appendChild(thumbHolder)
 		this.thumbnailHolder = thumbHolder
 
@@ -150,7 +156,14 @@ class vttThumbnailsPlugin {
 		this.registeredEvents.progressBarMouseLeave = () => this.onBarMouseleave()
 
 		this.progressBar.addEventListener(`mouseenter`, this.registeredEvents.progressBarMouseEnter)
+		this.progressBar.addEventListener(`touchstart`, this.registeredEvents.progressBarMouseEnter)
 		this.progressBar.addEventListener(`mouseleave`, this.registeredEvents.progressBarMouseLeave)
+		this.progressBar.addEventListener(`touchend`, this.registeredEvents.progressBarMouseLeave)
+
+		this.progressHolder.addEventListener(`mouseenter`, this.registeredEvents.progressBarMouseEnter)
+		this.progressHolder.addEventListener(`touchstart`, this.registeredEvents.progressBarMouseEnter)
+		this.progressHolder.addEventListener(`mouseleave`, this.registeredEvents.progressBarMouseLeave)
+		this.progressHolder.addEventListener(`touchend`, this.registeredEvents.progressBarMouseLeave)
 	}
 
 	onBarMouseenter() {
@@ -159,13 +172,23 @@ class vttThumbnailsPlugin {
 		}
 
 		this.registeredEvents.progressBarMouseMove = this.mouseMoveCallback
+
 		this.progressBar.addEventListener(`mousemove`, this.registeredEvents.progressBarMouseMove)
+		this.progressBar.addEventListener(`touchmove`, this.registeredEvents.progressBarMouseMove)
+
+		this.progressHolder.addEventListener(`mousemove`, this.registeredEvents.progressBarMouseMove)
+		this.progressHolder.addEventListener(`touchmove`, this.registeredEvents.progressBarMouseMove)
+
 		this.showThumbnailHolder()
 	}
 
 	onBarMouseleave() {
 		if (this.registeredEvents.progressBarMouseMove) {
 			this.progressBar.removeEventListener(`mousemove`, this.registeredEvents.progressBarMouseMove)
+			this.progressBar.removeEventListener(`touchmove`, this.registeredEvents.progressBarMouseMove)
+
+			this.progressHolder.removeEventListener(`mousemove`, this.registeredEvents.progressBarMouseMove)
+			this.progressHolder.removeEventListener(`touchmove`, this.registeredEvents.progressBarMouseMove)
 		}
 
 		this.hideThumbnailHolder()
@@ -206,11 +229,11 @@ class vttThumbnailsPlugin {
 	}
 
 	showThumbnailHolder() {
-		this.thumbnailHolder.style.opacity = `1`
+		this.thumbnailHolder.classList.remove('hidden')
 	}
 
 	hideThumbnailHolder() {
-		this.thumbnailHolder.style.opacity = `0`
+		this.thumbnailHolder.classList.add('hidden')
 	}
 
 	updateThumbnailStyle(percent) {

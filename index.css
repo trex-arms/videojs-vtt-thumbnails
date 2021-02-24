@@ -4,12 +4,30 @@
 
 .video-js .vjs-vtt-thumbnail-display {
 	position: absolute;
-	transition: transform .1s, opacity .2s;
 	bottom: 0;
 	pointer-events: none;
-	box-shadow: 0 0 7px rgba(0,0,0,.6);
+	border: 2px solid #000;
 }
 
 .video-js .vjs-time-tooltip {
 	top: -31px;
+}
+
+.video-js.vjs-scrubbing .vjs-time-tooltip {
+	display: block;
+	font-size: 0.6em;
+	visibility: visible;
+}
+
+.video-js.vjs-touch-enabled .vjs-vtt-thumbnail-display {
+	display: none;
+}
+
+.video-js .vjs-vtt-thumbnail-display.hidden {
+	display: none;
+}
+
+.video-js.vjs-touch-enabled.vjs-scrubbing .vjs-vtt-thumbnail-display,
+.video-js.vjs-touch-enabled .vjs-progress-control:active .vjs-vtt-thumbnail-display {
+	display: block !important;
 }
