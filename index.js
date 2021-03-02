@@ -52,11 +52,20 @@ class vttThumbnailsPlugin {
 		if (this.progressBar) {
 			this.progressBar.removeEventListener(`mouseenter`, this.registeredEvents.progressBarMouseEnter)
 			this.progressBar.removeEventListener(`touchstart`, this.registeredEvents.progressBarMouseEnter)
-
-			this.progressBar.removeEventListener(`mouseleave`, this.registeredEvents.progressBarMouseLeave)
 			this.progressBar.removeEventListener(`touchend`, this.registeredEvents.progressBarMouseLeave)
+			this.progressBar.removeEventListener(`mouseleave`, this.registeredEvents.progressBarMouseLeave)
+
 			this.progressBar.removeEventListener(`mousemove`, this.registeredEvents.progressBarMouseMove)
 			this.progressBar.removeEventListener(`touchmove`, this.registeredEvents.progressBarMouseMove)
+		}
+
+		if (this.progressHolder) {
+			this.progressHolder.removeEventListener(`mouseenter`, this.registeredEvents.progressBarMouseEnter)
+			this.progressHolder.removeEventListener(`touchstart`, this.registeredEvents.progressBarMouseEnter)
+			this.progressHolder.removeEventListener(`touchend`, this.registeredEvents.progressBarMouseLeave)
+
+			this.progressHolder.removeEventListener(`mousemove`, this.registeredEvents.progressBarMouseMove)
+			this.progressHolder.removeEventListener(`touchmove`, this.registeredEvents.progressBarMouseMove)
 		}
 
 		delete this.registeredEvents.progressBarMouseEnter
@@ -157,12 +166,11 @@ class vttThumbnailsPlugin {
 
 		this.progressBar.addEventListener(`mouseenter`, this.registeredEvents.progressBarMouseEnter)
 		this.progressBar.addEventListener(`touchstart`, this.registeredEvents.progressBarMouseEnter)
-		this.progressBar.addEventListener(`mouseleave`, this.registeredEvents.progressBarMouseLeave)
 		this.progressBar.addEventListener(`touchend`, this.registeredEvents.progressBarMouseLeave)
+		this.progressBar.addEventListener(`mouseleave`, this.registeredEvents.progressBarMouseLeave)
 
 		this.progressHolder.addEventListener(`mouseenter`, this.registeredEvents.progressBarMouseEnter)
 		this.progressHolder.addEventListener(`touchstart`, this.registeredEvents.progressBarMouseEnter)
-		this.progressHolder.addEventListener(`mouseleave`, this.registeredEvents.progressBarMouseLeave)
 		this.progressHolder.addEventListener(`touchend`, this.registeredEvents.progressBarMouseLeave)
 	}
 
