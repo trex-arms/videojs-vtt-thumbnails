@@ -1,4 +1,4 @@
-import { version as VERSION } from '../package.json'
+import { version as VERSION } from './package.json'
 
 // Default options for the plugin.
 const defaults = {}
@@ -229,11 +229,11 @@ class vttThumbnailsPlugin {
 	}
 
 	showThumbnailHolder() {
-		this.thumbnailHolder.classList.remove('hidden')
+		this.thumbnailHolder.classList.remove(`hidden`)
 	}
 
 	hideThumbnailHolder() {
-		this.thumbnailHolder.classList.add('hidden')
+		this.thumbnailHolder.classList.add(`hidden`)
 	}
 
 	updateThumbnailStyle(percent) {
